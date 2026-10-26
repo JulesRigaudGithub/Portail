@@ -16,9 +16,9 @@
 #define T2 1
 #define T3 5
 #define T4 1
-#define T5 40
+#define T5 4
 #define T6 2
-#define T7 10
+#define T7 1
 #define T8 1
 
 #define INT_PIN 2

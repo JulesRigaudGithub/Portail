@@ -122,6 +122,44 @@ ISR -[dashed]-> LOOP : sets buttonEdgePending,\nwakes CPU
 @enduml
 ```
 
+## Wiring
+
+| Pin | Name | Role |
+| --- | --- | --- |
+| 2 | `BUTTON_PIN` | RF receiver / push button, pulls to GND (INPUT_PULLUP, INT0 on FALLING edge) |
+| 6 | `MOTOR_RELAY_PIN` | Motor / pump |
+| 7 | `OPEN_RELAY_PIN` | OPEN valve |
+| 8 | `CLOSE_RELAY_PIN` | CLOSE valve |
+| 9 | `LIGHT_RELAY_PIN` | Light |
+| 10 | `DOOR_RELAY_PIN` | Door latch |
+| `LED_BUILTIN` | | ON while a cycle runs |
+
+## On-site tuning (defaults)
+
+The defaults are placeholders; measure the real values on site.
+
+| Constant | Default | Used for |
+| --- | --- | --- |
+| `BUTTON_DEBOUNCE_MS` | 50 ms | Input must still be LOW this long after the edge. Lower it if short RF pulses show up as "edge rejected" |
+| `BUTTON_GUARD_MS` | 1000 ms | Minimum gap between two accepted presses |
+| `T_MOTOR_SPINUP_MS` | 2000 ms | Motor running before anything moves |
+| `T_LATCH_PULSE_MS` | 1000 ms | Door latch pulse |
+| `T_OPEN_TRAVEL_MS` | 20000 ms | OPEN valve on |
+| `T_HOLD_OPEN_LONG_MS` | 60000 ms | Gate held open, long cycle |
+| `T_HOLD_OPEN_SHORT_MS` | 2000 ms | Gate held open, short cycle |
+| `T_CLOSE_TRAVEL_MS` | 20000 ms | CLOSE valve on |
+| `T_CLOSE_SETTLE_MS` | 1000 ms | After CLOSE valve off, before MOTOR and LIGHT go off |
+| `T_ABORT_GRACE_MS` | 20000 ms | MOTOR + LIGHT kept on after an abort |
+| `CYCLE_WATCHDOG_MARGIN_MS` | 30000 ms | Added to the planned cycle length before an emergency stop |
+
+With these defaults:
+
+| Cycle | Planned length | Watchdog fires after |
+| --- | --- | --- |
+| Long | 104 s | 134 s |
+| Short | 46 s | 76 s |
+| Short, right after an abort (spin-up skipped) | 44 s | 74 s |
+
 ## Power loss
 
 | Moment of the power cut | EEPROM holds | After power returns |
